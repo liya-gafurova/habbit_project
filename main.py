@@ -1,11 +1,26 @@
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from collections import ChainMap
+
+fruit_prices = {
+    'apples': 98,
+    'oranges': 110,
+    'bananas': 120,
+    'pineapples': 60,
+}
+
+vegetable_prices = {
+    'tomatoes': 70,
+    'cucumbers': 40,
+    'pineapples': 888,
+}
 
 
+assortment = ChainMap(fruit_prices, vegetable_prices)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+print(assortment)
+print(assortment.values())
+print(assortment.keys())
 
+for key, item in assortment.items():
+    print(key, item) ## passes repeated key 'pineapples'
 
+############################################################3
