@@ -13,7 +13,6 @@ vegetable_prices = {
     'pineapples': 888,
 }
 
-
 assortment = ChainMap(fruit_prices, vegetable_prices)
 
 print(assortment)
@@ -21,6 +20,10 @@ print(assortment.values())
 print(assortment.keys())
 
 for key, item in assortment.items():
-    print(key, item) ## passes repeated key 'pineapples'
+    print(key, item)  ## passes repeated key 'pineapples'
+
 
 ############################################################3
+
+def function_to_be_tested(param: int):
+    return f'You have entered number: {param}'
