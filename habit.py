@@ -38,3 +38,12 @@ class Habit():
         }
         return json.dumps(pattern)
 
+"""
+PeriodN (object Value - from Architecture Patterns with Python): 
+    - days
+    - time 
+    - preconditions
+
+1 unit of Doc - 1 month
+1 unit of Habit - 1 Period
+"""
