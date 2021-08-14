@@ -1,49 +1,68 @@
 import json
+from dataclasses import dataclass
+from datetime import datetime
+from enum import IntEnum
+from typing import List
 
 
-class Habit():
+"""
+PeriodN (object Value - from Architecture Patterns with Python): 
+    - days of the week 
+    - time 
+
+1 unit of Period - 1 week
+1 unit of Doc - 1 month
+1 unit of Habit - 1 Period
+"""
+
+
+class DaysOfWeek(IntEnum):
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
+
+
+@dataclass()
+class WeekPeriod:
+    days_of_week: List[int]
+    time: datetime
+
+
+class Habit:
+
     def __init__(self, name: str, description: str = None):
         self.name = name
         self.description = description
-        self.preconditions = []
+        self.preconditions = list()
         self.place = None
-        self.time = None
 
-    def __str__(self):
-        return self.__representation_pattern()
+        self.periods: List[WeekPeriod] = list()
+
+    def set_period(self, week_period: WeekPeriod):
+        # определить набор периодов, когда я буду реализовывать привычку для одной недели
+        # этот набор периодов будет повторяться каждую неделю
+        print(week_period)
 
     def set_place(self, place: str):
         self.place = place
 
-    def set_time(self, time: str):
-        # 8.30 in the morning
-        self.time = time
-
-    def set_schedule(self, **kwargs):
-        # everyday / choose days of the week ...
-        # TODO: how to manage schedule
-        print(kwargs)
-
     def set_precondition(self, precondition: str):
         # text description about what should be before habit
         self.preconditions.append(precondition)
+
+    def __str__(self):
+        return self.__representation_pattern()
 
     def __representation_pattern(self):
         pattern = {
             'name': self.name,
             'description': self.description,
             'place': self.place,
-            'time': self.time,
             'preconditions': self.preconditions
         }
         return json.dumps(pattern)
 
-"""
-PeriodN (object Value - from Architecture Patterns with Python): 
-    - days
-    - time 
-    - preconditions
-
-1 unit of Doc - 1 month
-1 unit of Habit - 1 Period
-"""

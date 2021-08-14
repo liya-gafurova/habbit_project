@@ -84,7 +84,6 @@ my_habit = Habit(name='Reading',
                  description='Habit of reading 10 pages of professional literature every day')
 my_habit.set_precondition('After work')
 my_habit.set_place('At work table')
-my_habit.set_time('In the evening, 21:00')
 
 print(my_habit)
 

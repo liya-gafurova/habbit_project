@@ -1,9 +1,11 @@
+import logging
 from dataclasses import dataclass
 from typing import NamedTuple
 from collections import namedtuple
 
 import pytest
 
+logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class Name:
@@ -43,3 +45,7 @@ def can_multiply_money_by_a_number():
 def multiplying_two_money_values_is_an_error():
     with pytest.raises(TypeError):
         tenner*fiver
+
+
+
+print(logger.name)
