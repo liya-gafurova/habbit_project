@@ -1,6 +1,6 @@
 import json
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import dataclass, asdict
+from datetime import time
 from enum import IntEnum
 from typing import List
 
@@ -29,7 +29,10 @@ class DaysOfWeek(IntEnum):
 @dataclass()
 class WeekPeriod:
     days_of_week: List[int]
-    time: datetime
+    time: time
+
+    def to_dict(self):
+        return asdict(self)
 
 
 class Habit:
@@ -45,7 +48,7 @@ class Habit:
     def set_period(self, week_period: WeekPeriod):
         # определить набор периодов, когда я буду реализовывать привычку для одной недели
         # этот набор периодов будет повторяться каждую неделю
-        print(week_period)
+        self.periods.append(week_period)
 
     def set_place(self, place: str):
         self.place = place
@@ -62,7 +65,10 @@ class Habit:
             'name': self.name,
             'description': self.description,
             'place': self.place,
-            'preconditions': self.preconditions
+            'preconditions': self.preconditions,
+            'periods': [p.to_dict() for p in self.periods]
         }
         return json.dumps(pattern)
+
+
 

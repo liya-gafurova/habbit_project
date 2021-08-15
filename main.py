@@ -1,9 +1,10 @@
 from collections import ChainMap
+from datetime import datetime
 
 from docx import Document
 from docx.shared import Inches
 
-from habit import Habit
+from habit import Habit, WeekPeriod, DaysOfWeek
 
 fruit_prices = {
     'apples': 98,
@@ -84,6 +85,15 @@ my_habit = Habit(name='Reading',
                  description='Habit of reading 10 pages of professional literature every day')
 my_habit.set_precondition('After work')
 my_habit.set_place('At work table')
+
+my_habit.set_period(
+    WeekPeriod(days_of_week=[DaysOfWeek.MONDAY,
+                             DaysOfWeek.TUESDAY,
+                             DaysOfWeek.WEDNESDAY,
+                             DaysOfWeek.THURSDAY,
+                             DaysOfWeek.FRIDAY],
+                time= (21, 00))
+)
 
 print(my_habit)
 
