@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass, asdict
-from datetime import time
+import time
 from enum import IntEnum
 from typing import List
 
@@ -29,7 +29,7 @@ class DaysOfWeek(IntEnum):
 @dataclass()
 class WeekPeriod:
     days_of_week: List[int]
-    time: time
+    time: str
 
     def to_dict(self):
         return asdict(self)

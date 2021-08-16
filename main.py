@@ -1,5 +1,5 @@
 from collections import ChainMap
-from datetime import datetime
+import time
 
 from docx import Document
 from docx.shared import Inches
@@ -33,6 +33,7 @@ for key, item in assortment.items():
 
 def function_to_be_tested(param: int):
     return f'You have entered number: {param}'
+
 
 ############################################################
 
@@ -79,6 +80,7 @@ def test_create_document():
 
     document.save('demo.docx')
 
+
 ############################################################
 
 my_habit = Habit(name='Reading',
@@ -92,8 +94,12 @@ my_habit.set_period(
                              DaysOfWeek.WEDNESDAY,
                              DaysOfWeek.THURSDAY,
                              DaysOfWeek.FRIDAY],
-                time= (21, 00))
+               time = '21:00')
+)
+my_habit.set_period(
+    WeekPeriod(days_of_week=[DaysOfWeek.SATURDAY,
+                             DaysOfWeek.SUNDAY],
+               time = '11:00')
 )
 
 print(my_habit)
-
