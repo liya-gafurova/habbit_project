@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 from typing import NamedTuple
-from collections import namedtuple
+from collections import namedtuple, ChainMap
 
 import pytest
 
@@ -47,5 +47,81 @@ def multiplying_two_money_values_is_an_error():
         tenner*fiver
 
 
+fruit_prices = {
+    'apples': 98,
+    'oranges': 110,
+    'bananas': 120,
+    'pineapples': 60,
+}
+
+vegetable_prices = {
+    'tomatoes': 70,
+    'cucumbers': 40,
+    'pineapples': 888,
+}
+
+assortment = ChainMap(fruit_prices, vegetable_prices)
+
+print(assortment)
+print(assortment.values())
+print(assortment.keys())
+
+for key, item in assortment.items():
+    print(key, item)  ## passes repeated key 'pineapples'
+
+
+############################################################
+
+def function_to_be_tested(param: int):
+    return f'You have entered number: {param}'
+
+
+############################################################
+
+def test_create_document():
+    document = Document()
+
+    document.add_heading('Document Title', 0)
+
+    p = document.add_paragraph('A plain paragraph having some ')
+    p.add_run('bold').bold = True
+    p.add_run(' and some ')
+    p.add_run('italic.').italic = True
+
+    document.add_heading('Heading, level 1', level=1)
+    document.add_paragraph('Intense quote', style='Intense Quote')
+
+    document.add_paragraph(
+        'first item in unordered list', style='List Bullet'
+    )
+    document.add_paragraph(
+        'first item in ordered list', style='List Number'
+    )
+
+    document.add_picture('./q101.jpg', width=Inches(1.25))
+
+    records = (
+        (3, '101', 'Spam'),
+        (7, '422', 'Eggs'),
+        (4, '631', 'Spam, spam, eggs, and spam')
+    )
+
+    table = document.add_table(rows=1, cols=3)
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'Qty'
+    hdr_cells[1].text = 'Id'
+    hdr_cells[2].text = 'Desc'
+    for qty, id, desc in records:
+        row_cells = table.add_row().cells
+        row_cells[0].text = str(qty)
+        row_cells[1].text = id
+        row_cells[2].text = desc
+
+    document.add_page_break()
+
+    document.save('demo.docx')
+
+
+############################################################
 
 print(logger.name)

@@ -4,7 +4,6 @@ import time
 from enum import IntEnum
 from typing import List
 
-
 """
 PeriodN (object Value - from Architecture Patterns with Python): 
     - days of the week 
@@ -71,4 +70,19 @@ class Habit:
         return json.dumps(pattern)
 
 
+"""
+документ должен принимать только то, что связано с документом 
+то есть количество строк, столбцов, обьединение ячеек, название таблиц, подписиб заголовки...
+Документ не должен знать ничего про то, что такое  Привычка, 
+он должен уметь создавать документы для любого типа сущности
+"""
 
+
+class TransformHabitToDocumentParameters:
+    def __init__(self):
+        pass
+
+
+class Document:
+    def __init__(self, ):
+        pass

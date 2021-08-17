@@ -1,6 +1,6 @@
 import unittest
 
-from main import function_to_be_tested
+from different import function_to_be_tested
 
 
 class MyFirstTest(unittest.TestCase):
