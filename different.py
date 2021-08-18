@@ -1,9 +1,14 @@
 import logging
+import typing
 from dataclasses import dataclass
 from typing import NamedTuple
 from collections import namedtuple, ChainMap
 
+
 import pytest
+from docx import Document
+
+import habit
 
 logger = logging.getLogger(__name__)
 
@@ -124,4 +129,12 @@ def test_create_document():
 
 ############################################################
 
-print(logger.name)
+## abstract protocol that describes behavior of an paticular class
+
+class TransformationParamsToDocumentUseCase(typing.Protocol):
+    def transform(self, params, document):
+        pass
+
+class TransformHabitToDocument(TransformationParamsToDocumentUseCase):
+    def transform(self, params: habit.Habit, document: habit.Document):
+        pass
