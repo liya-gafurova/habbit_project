@@ -1,4 +1,4 @@
-from habit import Habit, WeekPeriod, DaysOfWeek
+from app.habit import Habit, WeekPeriod, DaysOfWeek
 
 
 my_habit = Habit(name='Reading',

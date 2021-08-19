@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import NamedTuple
 from collections import namedtuple, ChainMap
 
-
 import pytest
 from docx import Document
 
@@ -12,44 +11,54 @@ import habit
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass(frozen=True)
 class Name:
-    first_name:str
-    surname:str
+    first_name: str
+    surname: str
+
 
 class Money(NamedTuple):
-    currency:str
-    value:int
+    currency: str
+    value: int
 
-Line=namedtuple('Line',['sku','qty'])
+
+Line = namedtuple('Line', ['sku', 'qty'])
+
 
 def test_equality():
     # objects with equal fields are equal
-    assert Money('gbp',10)==Money('gbp',10)
-    assert Name('Harry','Percival')!=Name('Bob','Gregory')
-    assert Line('RED-CHAIR',5)==Line('RED-CHAIR',5)
+    assert Money('gbp', 10) == Money('gbp', 10)
+    assert Name('Harry', 'Percival') != Name('Bob', 'Gregory')
+    assert Line('RED-CHAIR', 5) == Line('RED-CHAIR', 5)
+
 
 test_equality()
 
-fiver=Money('gbp',5)
-tenner=Money('gbp',10)
+fiver = Money('gbp', 5)
+tenner = Money('gbp', 10)
+
 
 def can_add_money_values_for_the_same_currency():
-    assert fiver+fiver==tenner
+    assert fiver + fiver == tenner
+
 
 def can_subtract_money_values():
-    assert tenner-fiver==fiver
+    assert tenner - fiver == fiver
+
 
 def adding_different_currencies_fails():
     with pytest.raises(ValueError):
-        Money('usd',10)+Money('gbp',10)
+        Money('usd', 10) + Money('gbp', 10)
+
 
 def can_multiply_money_by_a_number():
-    assert fiver*5==Money('gbp',25)
+    assert fiver * 5 == Money('gbp', 25)
+
 
 def multiplying_two_money_values_is_an_error():
     with pytest.raises(TypeError):
-        tenner*fiver
+        tenner * fiver
 
 
 fruit_prices = {
@@ -134,6 +143,7 @@ def test_create_document():
 class TransformationParamsToDocumentUseCase(typing.Protocol):
     def transform(self, params, document):
         pass
+
 
 class TransformHabitToDocument(TransformationParamsToDocumentUseCase):
     def transform(self, params: habit.Habit, document: habit.Document):
