@@ -7,7 +7,7 @@ from collections import namedtuple, ChainMap
 import pytest
 from docx import Document
 
-import habit
+import app.habit as habit
 
 logger = logging.getLogger(__name__)
 
@@ -146,5 +146,5 @@ class TransformationParamsToDocumentUseCase(typing.Protocol):
 
 
 class TransformHabitToDocument(TransformationParamsToDocumentUseCase):
-    def transform(self, params: habit.Habit, document: habit.Document):
+    def transform(self, params: habit.Habit, document: habit.DocxDocument):
         pass

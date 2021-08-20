@@ -83,12 +83,12 @@ class TransformHabitToDocumentParameters:
         pass
 
 
-class Document:
+class DocxDocument:
     def __init__(self, ):
         pass
 
 
-class HabitTrackerDocument(Document):
+class HabitTrackerDocxDocument(DocxDocument):
     def __init__(self):
         super().__init__()
         ...
