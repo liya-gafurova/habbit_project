@@ -1,5 +1,9 @@
+import datetime
+
 from docx import Document
 from docx.shared import Inches
+from docx.enum.section import WD_ORIENTATION
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 from app.habit import Habit
 
@@ -62,9 +66,16 @@ class HabitDocument:
         self.document.save(document_name)
 
     def _create_document_heading(self):
-        # TODO make landscape orientation
+        # landscape orientation
+        section = self.document.sections[0]
+        new_width, new_height = section.page_height, section.page_width
+        section.orientation = WD_ORIENTATION.LANDSCAPE
+        section.page_width = new_width
+        section.page_height = new_height
 
-        self.document.add_heading(self.name_of_habit)
+        # Heading - name of Habit
+        heading = self.document.add_heading(self.name_of_habit)
+        heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
         line = self.document.add_paragraph('Description: ')
         line.add_run(self.habit_description).bold = True
@@ -77,12 +88,13 @@ class HabitDocument:
         line = self.document.add_paragraph('Place: ')
         line.add_run(self.place).bold = True
 
+        # TODO add table
+
 
 my_habit = Habit(name='Reading',
                  description='Habit of reading 10 pages of professional literature every day')
 my_habit.set_precondition('After work')
 my_habit.set_place('At work table')
-
 
 doc = HabitDocument(
     name=my_habit.name,
@@ -90,8 +102,4 @@ doc = HabitDocument(
     preconditions=my_habit.preconditions,
     place=my_habit.place
 )
-doc.create_document('first_habit_doc.docx')
-
-
-
-
+doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
