@@ -1,11 +1,13 @@
 import datetime
+import calendar
+import math
 
 from docx import Document
 from docx.shared import Inches
 from docx.enum.section import WD_ORIENTATION
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-from app.habit import Habit
+from app.habit import Habit, Months
 
 
 def test_create_document():
@@ -53,11 +55,16 @@ def test_create_document():
 
 
 class HabitDocument:
-    def __init__(self, name, description, preconditions, place):
+    CURRENT_YEAR = datetime.datetime.today().year
+
+    def __init__(self, name, description, preconditions, place, week_periods, month, year=None):
         self.name_of_habit = name
         self.habit_description = description
         self.preconditions = preconditions
         self.place = place
+        self.week_periods = week_periods
+        self.month = month
+        self.year = year if year else self.CURRENT_YEAR
 
         self.document: Document = Document()
 
@@ -88,7 +95,34 @@ class HabitDocument:
         line = self.document.add_paragraph('Place: ')
         line.add_run(self.place).bold = True
 
-        # TODO add table
+        # TODO check table !!!
+        empty_table = EmptyHabitTable(self.month, self.year, self.document)
+        empty_table.draw_table_on_document()
+
+
+
+
+class EmptyHabitTable:
+    NUMBER_OF_DAYS_IN_ROW = 7 # week in row
+
+    def __init__(self, month: int, year: int, document: HabitDocument):
+        self.month = month
+        self.year = year
+        self.habit_document = document
+
+    @property
+    def number_of_days_in_month(self):
+        return calendar.monthrange(self.year, self.month)
+
+    @property
+    def number_of_rows(self):
+        return math.ceil(self.number_of_days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
+
+    def draw_table_on_document(self):
+        self.habit_document.add_table(rows=self.number_of_rows,
+                                              cols=self.NUMBER_OF_DAYS_IN_ROW)
+
+
 
 
 my_habit = Habit(name='Reading',
