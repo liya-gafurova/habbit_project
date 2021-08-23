@@ -7,7 +7,7 @@ from docx.shared import Inches
 from docx.enum.section import WD_ORIENTATION
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-from app.habit import Habit, Months
+from app.habit import Habit, Months, WeekPeriod, DaysOfWeek
 
 
 def test_create_document():
@@ -56,6 +56,7 @@ def test_create_document():
 
 class HabitDocument:
     CURRENT_YEAR = datetime.datetime.today().year
+    NUMBER_OF_DAYS_IN_ROW = 7  # week in row
 
     def __init__(self, name, description, preconditions, place, week_periods, month, year=None):
         self.name_of_habit = name
@@ -70,6 +71,7 @@ class HabitDocument:
 
     def create_document(self, document_name):
         self._create_document_heading()
+        self._create_table()
         self.document.save(document_name)
 
     def _create_document_heading(self):
@@ -95,45 +97,35 @@ class HabitDocument:
         line = self.document.add_paragraph('Place: ')
         line.add_run(self.place).bold = True
 
-        # TODO check table !!!
-        empty_table = EmptyHabitTable(self.month, self.year, self.document)
-        empty_table.draw_table_on_document()
+    def _create_table(self):
+        rows, columns = self._calculate_table_size()
+        self.document.add_table(rows=rows, cols=columns)
 
+    def _calculate_table_size(self):
+        _, days_in_month = calendar.monthrange(self.year, self.month)
+        rows = math.ceil(days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
+        columns = self.NUMBER_OF_DAYS_IN_ROW
 
-
-
-class EmptyHabitTable:
-    NUMBER_OF_DAYS_IN_ROW = 7 # week in row
-
-    def __init__(self, month: int, year: int, document: HabitDocument):
-        self.month = month
-        self.year = year
-        self.habit_document = document
-
-    @property
-    def number_of_days_in_month(self):
-        return calendar.monthrange(self.year, self.month)
-
-    @property
-    def number_of_rows(self):
-        return math.ceil(self.number_of_days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
-
-    def draw_table_on_document(self):
-        self.habit_document.add_table(rows=self.number_of_rows,
-                                              cols=self.NUMBER_OF_DAYS_IN_ROW)
-
-
+        return rows, columns
 
 
 my_habit = Habit(name='Reading',
                  description='Habit of reading 10 pages of professional literature every day')
 my_habit.set_precondition('After work')
 my_habit.set_place('At work table')
+my_habit.set_period(WeekPeriod(
+    days_of_week=[DaysOfWeek.SATURDAY, DaysOfWeek.SUNDAY],
+    time='8:00'
+))
 
+# TODO just Habit Object
 doc = HabitDocument(
     name=my_habit.name,
     description=my_habit.description,
     preconditions=my_habit.preconditions,
-    place=my_habit.place
+    place=my_habit.place,
+
+    week_periods=my_habit.periods,
+    month=Months.FEBRUARY
 )
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
