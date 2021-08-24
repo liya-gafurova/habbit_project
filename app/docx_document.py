@@ -7,6 +7,7 @@ from docx.shared import Inches
 from docx.enum.section import WD_ORIENTATION
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
+from app.fillers import TABLE_FILLERS
 from app.habit import Habit, Months, WeekPeriod, DaysOfWeek
 
 
@@ -99,7 +100,10 @@ class HabitDocument:
 
     def _create_table(self):
         rows, columns = self._calculate_table_size()
-        self.document.add_table(rows=rows, cols=columns)
+        table = self.document.add_table(rows=rows, cols=columns)
+        for row in table.rows:
+            for cell in row.cells:
+                cell.text = TABLE_FILLERS.get('five_rows_table')
 
     def _calculate_table_size(self):
         _, days_in_month = calendar.monthrange(self.year, self.month)
@@ -126,6 +130,6 @@ doc = HabitDocument(
     place=my_habit.place,
 
     week_periods=my_habit.periods,
-    month=Months.FEBRUARY
+    month=Months.AUGUST
 )
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
