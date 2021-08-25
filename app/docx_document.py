@@ -1,6 +1,8 @@
 import datetime
 import calendar
 import math
+from collections import namedtuple
+from enum import Enum
 
 from docx import Document
 from docx.shared import Inches
@@ -9,6 +11,10 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 from app.fillers import TABLE_FILLERS
 from app.habit import Habit, Months, WeekPeriod, DaysOfWeek
+
+DocumentDaysOfWeek = dict(zip([1,2,3,4,5,6,7,],
+                              ['M', 'T', 'W', 'T', 'F', 'S', 'S']))
+
 
 
 def test_create_document():
@@ -101,13 +107,21 @@ class HabitDocument:
     def _create_table(self):
         rows, columns = self._calculate_table_size()
         table = self.document.add_table(rows=rows, cols=columns)
+        day_counter = 1
+        zero_month_filler = 0 if self.month < 10 else ''
         for row in table.rows:
             for cell in row.cells:
-                cell.text = TABLE_FILLERS.get('five_rows_table')
+
+                cell.text = f"{day_counter}/{zero_month_filler}{self.month}          M"
+                cell.text = cell.text+ '\n      21:00\n'
+
+                if day_counter == self.days_in_month:
+                    break
+                day_counter += 1
 
     def _calculate_table_size(self):
-        _, days_in_month = calendar.monthrange(self.year, self.month)
-        rows = math.ceil(days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
+        _, self.days_in_month = calendar.monthrange(self.year, self.month)
+        rows = math.ceil(self.days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
         columns = self.NUMBER_OF_DAYS_IN_ROW
 
         return rows, columns
@@ -130,6 +144,6 @@ doc = HabitDocument(
     place=my_habit.place,
 
     week_periods=my_habit.periods,
-    month=Months.AUGUST
+    month=Months.FEBRUARY
 )
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
