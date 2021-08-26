@@ -109,11 +109,14 @@ class HabitDocument:
         table = self.document.add_table(rows=rows, cols=columns)
         day_counter = 1
         zero_month_filler = 0 if self.month < 10 else ''
+        days_of_week_over_month_distribution = {day: datetime.datetime.isoweekday(datetime.datetime(self.year, self.month, day))
+                                                for day in range(1, self.days_in_month+ 1)}
+
         for row in table.rows:
             for cell in row.cells:
+                space_fillers = ' '*10 if day_counter > 9 else ' '*11
+                cell.text = f"{day_counter}/{zero_month_filler}{self.month}{space_fillers}{DocumentDaysOfWeek[days_of_week_over_month_distribution[day_counter]]}"
 
-                cell.text = f"{day_counter}/{zero_month_filler}{self.month}          M"
-                cell.text = cell.text+ '\n      21:00\n'
 
                 if day_counter == self.days_in_month:
                     break
@@ -144,6 +147,6 @@ doc = HabitDocument(
     place=my_habit.place,
 
     week_periods=my_habit.periods,
-    month=Months.FEBRUARY
+    month=Months.AUGUST
 )
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
