@@ -70,11 +70,27 @@ class HabitDocument:
         self.habit_description = description
         self.preconditions = preconditions
         self.place = place
-        self.week_periods = week_periods
+        self.week_periods:WeekPeriod = week_periods
         self.month = month
         self.year = year if year else self.CURRENT_YEAR
 
         self.document: Document = Document()
+
+    @property
+    def days_of_week_over_month_distribution(self):
+
+        days_of_week_over_month_distribution = {}
+        for day in range(1, self.days_in_month + 1):
+            week_day_number = datetime.datetime.isoweekday(datetime.datetime(self.year, self.month, day))
+            time = ''
+            for week_period in self.week_periods:
+                if week_day_number in week_period.days_of_week:
+                    time = week_period.time
+            days_of_week_over_month_distribution[day]= (week_day_number, time)
+
+        return days_of_week_over_month_distribution
+
+
 
     def create_document(self, document_name):
         self._create_document_heading()
@@ -109,13 +125,15 @@ class HabitDocument:
         table = self.document.add_table(rows=rows, cols=columns)
         day_counter = 1
         zero_month_filler = 0 if self.month < 10 else ''
-        days_of_week_over_month_distribution = {day: datetime.datetime.isoweekday(datetime.datetime(self.year, self.month, day))
-                                                for day in range(1, self.days_in_month+ 1)}
+
 
         for row in table.rows:
             for cell in row.cells:
-                space_fillers = ' '*10 if day_counter > 9 else ' '*11
-                cell.text = f"{day_counter}/{zero_month_filler}{self.month}{space_fillers}{DocumentDaysOfWeek[days_of_week_over_month_distribution[day_counter]]}"
+                space_fillers = ' '*9 if day_counter > 9 else ' '*11
+                day_of_week = DocumentDaysOfWeek[self.days_of_week_over_month_distribution[day_counter][0]]
+                time = self.days_of_week_over_month_distribution[day_counter][1]
+                cell.text = f"{day_counter}/{zero_month_filler}{self.month}{space_fillers}{day_of_week}\n\n"
+                cell.text = cell.text + " "*6 + f'{time}\n'
 
 
                 if day_counter == self.days_in_month:
@@ -130,6 +148,7 @@ class HabitDocument:
         return rows, columns
 
 
+
 my_habit = Habit(name='Reading',
                  description='Habit of reading 10 pages of professional literature every day')
 my_habit.set_precondition('After work')
@@ -137,6 +156,10 @@ my_habit.set_place('At work table')
 my_habit.set_period(WeekPeriod(
     days_of_week=[DaysOfWeek.SATURDAY, DaysOfWeek.SUNDAY],
     time='8:00'
+))
+my_habit.set_period(WeekPeriod(
+    days_of_week=[DaysOfWeek.MONDAY, DaysOfWeek.THURSDAY],
+    time='8:15'
 ))
 
 # TODO just Habit Object
@@ -147,6 +170,6 @@ doc = HabitDocument(
     place=my_habit.place,
 
     week_periods=my_habit.periods,
-    month=Months.AUGUST
+    month=Months.FEBRUARY
 )
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
