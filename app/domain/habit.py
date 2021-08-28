@@ -1,52 +1,43 @@
+"""
+Привычка:
+ - Что?  name, description, preconditions --???
+ - Где? place
+ - Когда? week_periods, month, year=None
+"""
 import json
 from dataclasses import dataclass, asdict
-import time
-from enum import IntEnum
 from typing import List
 
-"""
-PeriodN (object Value - from Architecture Patterns with Python): 
-    - days of the week 
-    - time 
 
-1 unit of Period - 1 week
-1 unit of Doc - 1 month
-1 unit of Habit - 1 Period
-"""
+@dataclass
+class HabitData:
+    # What?
+    name: str
+    description: str
+    preconditions: List[str]
 
 
-class DaysOfWeek(IntEnum):
-    MONDAY = 1
-    TUESDAY = 2
-    WEDNESDAY = 3
-    THURSDAY = 4
-    FRIDAY = 5
-    SATURDAY = 6
-    SUNDAY = 7
+@dataclass
+class HabitPlace:
+    # Where?
+    place: str
 
 
-class Months(IntEnum):
-    JANUARY = 1
-    FEBRUARY = 2
-    MARCH = 3
-    APRIL = 4
-    MAY = 5
-    JUNE = 6
-    JULY = 7
-    AUGUST = 8
-    SEPTEMBER = 9
-    OCTOBER = 10
-    NOVEMBER = 11
-    DECEMBER = 12
-
-
-@dataclass()
+@dataclass
 class WeekPeriod:
     days_of_week: List[int]
     time: str
 
     def to_dict(self):
         return asdict(self)
+
+
+@dataclass
+class HabitSchedule:
+    # When?
+    week_periods: List[WeekPeriod]
+    month: int
+    year: int
 
 
 class Habit:
