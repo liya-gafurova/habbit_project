@@ -5,9 +5,10 @@ from collections import namedtuple
 from enum import Enum
 
 from docx import Document
-from docx.shared import Inches
+from docx.shared import Inches, RGBColor
 from docx.enum.section import WD_ORIENTATION
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.styles.styles import Styles
 
 from app.fillers import TABLE_FILLERS
 from app.habit import Habit, Months, WeekPeriod, DaysOfWeek
@@ -132,8 +133,15 @@ class HabitDocument:
                 space_fillers = ' '*9 if day_counter > 9 else ' '*11
                 day_of_week = DocumentDaysOfWeek[self.days_of_week_over_month_distribution[day_counter][0]]
                 time = self.days_of_week_over_month_distribution[day_counter][1]
-                cell.text = f"{day_counter}/{zero_month_filler}{self.month}{space_fillers}{day_of_week}\n\n"
-                cell.text = cell.text + " "*6 + f'{time}\n'
+
+                cell_header = cell.paragraphs[0].add_run(f"{day_counter}/{zero_month_filler}{self.month}{space_fillers}{day_of_week}")
+                cell_header.font.color.rgb = RGBColor(120, 120, 120)
+
+                habit_time_line = cell.add_paragraph().add_run(" "*6 + f'{time}\n')
+                habit_time_line.font.bold = True
+
+
+
 
 
                 if day_counter == self.days_in_month:
@@ -170,6 +178,6 @@ doc = HabitDocument(
     place=my_habit.place,
 
     week_periods=my_habit.periods,
-    month=Months.FEBRUARY
+    month=Months.AUGUST
 )
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
