@@ -7,11 +7,10 @@ from docx.shared import Inches, RGBColor
 from docx.enum.section import WD_ORIENTATION
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-from app.domain.habit import WeekPeriod
+from app.domain.habit import WeekPeriod, Habit
 from app.domain.helpers import DaysOfWeek, Months
 
-DocumentDaysOfWeek = dict(zip([1, 2, 3, 4, 5, 6, 7, ],
-                              ['M', 'T', 'W', 'T', 'F', 'S', 'S']))
+
 
 
 
@@ -19,23 +18,31 @@ DocumentDaysOfWeek = dict(zip([1, 2, 3, 4, 5, 6, 7, ],
 class HabitDocument:
     CURRENT_YEAR = datetime.datetime.today().year
     NUMBER_OF_DAYS_IN_ROW = 7  # week in row
+    DocumentDaysOfWeek = dict(zip([1, 2, 3, 4, 5, 6, 7, ],
+                                  ['M', 'T', 'W', 'T', 'F', 'S', 'S']))
 
-    def __init__(self, name, description, preconditions, place, week_periods, month, year=None):
-        self.name_of_habit = name
-        self.habit_description = description
-        self.preconditions = preconditions
-        self.place = place
-        self.week_periods: WeekPeriod = week_periods
-        self.month = month
-        self.year = year if year else self.CURRENT_YEAR
+    def __init__(self, habit: Habit):
+        # self.name_of_habit = name
+        # self.habit_description = description
+        # self.preconditions = preconditions
+        # self.place = place
+        # self.week_periods: WeekPeriod = week_periods
+        # self.month = month
+        # self.year = year if year else self.CURRENT_YEAR
+        self.habit: Habit = habit
 
         self.document: Document = Document()
+        self._days_in_month = self._get_number_of_days_in_months()
 
+    def _get_number_of_days_in_months(self):
+        _, days_in_month = calendar.monthrange(self.habit.schedule.year, self.habit.schedule.month)
+        return days_in_month
+# WIP
     @property
     def days_of_week_over_month_distribution(self):
 
         days_of_week_over_month_distribution = {}
-        for day in range(1, self.days_in_month + 1):
+        for day in range(1, self._days_in_month + 1):
             week_day_number = datetime.datetime.isoweekday(datetime.datetime(self.year, self.month, day))
             time = ''
             for week_period in self.week_periods:
@@ -92,13 +99,13 @@ class HabitDocument:
                 habit_time_line = cell.add_paragraph().add_run(" " * 6 + f'{time}\n')
                 habit_time_line.font.bold = True
 
-                if day_counter == self.days_in_month:
+                if day_counter == self._days_in_month:
                     break
                 day_counter += 1
 
     def _calculate_table_size(self):
-        _, self.days_in_month = calendar.monthrange(self.year, self.month)
-        rows = math.ceil(self.days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
+
+        rows = math.ceil(self._days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
         columns = self.NUMBER_OF_DAYS_IN_ROW
 
         return rows, columns

@@ -21,6 +21,7 @@ class HabitData:
 class HabitPlace:
     # Where?
     place: str
+    outside: bool
 
 
 @dataclass
@@ -42,64 +43,26 @@ class HabitSchedule:
 
 class Habit:
 
-    def __init__(self, name: str, description: str = None):
-        self.name = name
-        self.description = description
-        self.preconditions = list()
-        self.place = None
+    def __init__(self, habit_data: HabitData):
+        self.data = habit_data
+        self.place: HabitPlace
+        self.schedule: HabitSchedule
 
-        self.periods: List[WeekPeriod] = list()
-
-    def set_period(self, week_period: WeekPeriod):
+    def set_period(self, habit_schedule: HabitSchedule):
         # определить набор периодов, когда я буду реализовывать привычку для одной недели
         # этот набор периодов будет повторяться каждую неделю
-        self.periods.append(week_period)
+        self.schedule = habit_schedule
 
-    def set_place(self, place: str):
-        self.place = place
-
-    def set_precondition(self, precondition: str):
-        # text description about what should be before habit
-        self.preconditions.append(precondition)
+    def set_place(self, habit_place: HabitPlace):
+        self.place = habit_place
 
     def __str__(self):
         return self.__representation_pattern()
 
     def __representation_pattern(self):
         pattern = {
-            'name': self.name,
-            'description': self.description,
-            'place': self.place,
-            'preconditions': self.preconditions,
-            'periods': [p.to_dict() for p in self.periods]
+            'name': self.data.name,
+            'description': self.data.description,
+            'place': self.place.place
         }
         return json.dumps(pattern)
-
-
-"""
-документ должен принимать только то, что связано с документом 
-то есть количество строк, столбцов, обьединение ячеек, название таблиц, подписиб заголовки...
-Документ не должен знать ничего про то, что такое  Привычка, 
-он должен уметь создавать документы для любого типа сущности
-"""
-
-
-class TransformHabitToDocumentParameters:
-    def __init__(self):
-        pass
-
-
-class DocxDocument:
-    def __init__(self, ):
-        pass
-
-
-class HabitTrackerDocxDocument(DocxDocument):
-    def __init__(self):
-        super().__init__()
-        ...
-
-
-class HabitTrackerTable:
-    def __init__(self):
-        pass
