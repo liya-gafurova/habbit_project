@@ -48,12 +48,12 @@ class Habit:
         self.place: HabitPlace
         self.schedule: HabitSchedule
 
-    def set_period(self, habit_schedule: HabitSchedule):
+    def when(self, habit_schedule: HabitSchedule):
         # определить набор периодов, когда я буду реализовывать привычку для одной недели
         # этот набор периодов будет повторяться каждую неделю
         self.schedule = habit_schedule
 
-    def set_place(self, habit_place: HabitPlace):
+    def where(self, habit_place: HabitPlace):
         self.place = habit_place
 
     def __str__(self):

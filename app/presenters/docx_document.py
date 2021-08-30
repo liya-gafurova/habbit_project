@@ -111,27 +111,4 @@ class HabitDocument:
         return rows, columns
 
 
-my_habit = Habit(name='Reading',
-                 description='Habit of reading 10 pages of professional literature every day')
-my_habit.set_precondition('After work')
-my_habit.set_place('At work table')
-my_habit.set_period(WeekPeriod(
-    days_of_week=[DaysOfWeek.SATURDAY, DaysOfWeek.SUNDAY],
-    time='8:00'
-))
-my_habit.set_period(WeekPeriod(
-    days_of_week=[DaysOfWeek.MONDAY, DaysOfWeek.THURSDAY],
-    time='8:15'
-))
-
-# TODO just Habit Object
-doc = HabitDocument(
-    name=my_habit.name,
-    description=my_habit.description,
-    preconditions=my_habit.preconditions,
-    place=my_habit.place,
-
-    week_periods=my_habit.periods,
-    month=Months.AUGUST
-)
 doc.create_document(f'../files/first_habit_doc_{datetime.datetime.now()}.docx')
