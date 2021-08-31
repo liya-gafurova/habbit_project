@@ -45,8 +45,8 @@ class Habit:
 
     def __init__(self, habit_data: HabitData):
         self.data = habit_data
-        self.place: HabitPlace
-        self.schedule: HabitSchedule
+        self.place: HabitPlace = None
+        self.schedule: HabitSchedule = None
 
     def when(self, habit_schedule: HabitSchedule):
         # определить набор периодов, когда я буду реализовывать привычку для одной недели
