@@ -1,6 +1,7 @@
 import datetime
 
-from app.domain.habit import Habit, HabitData, HabitPlace, HabitSchedule, WeekPeriod
+from app.db.repository import HabitRepository
+from app.domain.habitentity import HabitEntity, HabitData, HabitPlace, HabitSchedule, WeekPeriod
 from app.domain.helpers import DaysOfWeek, Months
 
 
@@ -32,8 +33,15 @@ def test_habit_creation():
         year=datetime.datetime.today().year
     )
 
-    habit = Habit(habit_name)
+    habit = HabitEntity(habit_name)
     habit.where(habit_place)
     habit.when(schedule)
 
+    repo = HabitRepository()
+    habit_obj_id = repo.entity_to_db(habit)
+    habit_entity = repo.entity_from_db(habit_obj_id)
+
     assert habit.__str__() == '{"name": "Walking", "description": "Walking or Other outside  everyday activity", "place": "In the park / On the embankment"}'
+    assert habit.data.name == habit_entity.data.name
+
+test_habit_creation()

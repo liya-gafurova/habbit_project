@@ -7,7 +7,7 @@ from docx.shared import Inches, RGBColor
 from docx.enum.section import WD_ORIENTATION
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-from app.domain.habit import WeekPeriod, Habit
+from app.domain.habitentity import WeekPeriod, HabitEntity
 from app.domain.helpers import DaysOfWeek, Months
 
 
@@ -21,7 +21,7 @@ class HabitDocument:
     DocumentDaysOfWeek = dict(zip([1, 2, 3, 4, 5, 6, 7, ],
                                   ['M', 'T', 'W', 'T', 'F', 'S', 'S']))
 
-    def __init__(self, habit: Habit):
+    def __init__(self, habit: HabitEntity):
         # self.name_of_habit = name
         # self.habit_description = description
         # self.preconditions = preconditions
@@ -29,7 +29,7 @@ class HabitDocument:
         # self.week_periods: WeekPeriod = week_periods
         # self.month = month
         # self.year = year if year else self.CURRENT_YEAR
-        self.habit: Habit = habit
+        self.habit: HabitEntity = habit
 
         self.document: Document = Document()
         self._days_in_month = self._get_number_of_days_in_months()

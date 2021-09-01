@@ -146,5 +146,5 @@ class TransformationParamsToDocumentUseCase(typing.Protocol):
 
 
 class TransformHabitToDocument(TransformationParamsToDocumentUseCase):
-    def transform(self, params: habit.Habit, document: habit.DocxDocument):
+    def transform(self, params: habit.HabitEntity, document: habit.DocxDocument):
         pass

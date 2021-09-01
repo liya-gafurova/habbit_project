@@ -1,6 +1,6 @@
 import datetime
 
-from app.domain.habit import HabitData, HabitPlace, HabitSchedule, WeekPeriod, Habit
+from app.domain.habitentity import HabitData, HabitPlace, HabitSchedule, WeekPeriod, HabitEntity
 from app.domain.helpers import DaysOfWeek, Months
 
 """
@@ -11,7 +11,7 @@ from app.domain.helpers import DaysOfWeek, Months
 # все, что должно быть в юзкейсе, ниже
 # можно еще добавить сохранение в базу
 def create_habit(habit_name,habit_place, schedule):
-    habit = Habit(habit_name)
+    habit = HabitEntity(habit_name)
     habit.where(habit_place)
     habit.when(schedule)
     print(habit)

@@ -41,7 +41,7 @@ class HabitSchedule:
     year: int
 
 
-class Habit:
+class HabitEntity:
 
     def __init__(self, habit_data: HabitData):
         self.data = habit_data
