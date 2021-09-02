@@ -35,12 +35,20 @@ class HabitRepository:
         return new_habit_obj.id
 
     def entity_from_db(self, id):
-        habit_obj = Habit.get_by_id(id)
-        preconditions = (Preconditions.select().where(Preconditions.habit==habit_obj))
-        l = preconditions.execute()
+        habit_obj: Habit = Habit.get_by_id(id)
+        preconditions = Preconditions.select().where(Preconditions.habit == habit_obj)
+
+        days = WeekPeriods.select().where(WeekPeriods.habit == habit_obj)
+
+
+
         habit_entity = HabitEntity(habit_data=HabitData(
             name=habit_obj.name,
             description=habit_obj.description,
-            preconditions = [obj.precondition for obj in preconditions]
+            preconditions=[obj.precondition for obj in preconditions]
         ))
+
+        habit_entity.place = habit_obj.place
+        # manage days
+
         return habit_entity
