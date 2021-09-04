@@ -1,7 +1,8 @@
 import datetime
 
-from app.domain.habitentity import HabitData, HabitPlace, HabitSchedule, WeekPeriod, HabitEntity
-from app.domain.helpers import DaysOfWeek, Months
+from app.db.repository import HabitRepository
+from app.domain.habitentity import HabitEntity
+
 
 """
 сюда должны данные приходить уже!!!!!!
@@ -14,4 +15,8 @@ def create_habit(habit_name,habit_place, schedule):
     habit = HabitEntity(habit_name)
     habit.where(habit_place)
     habit.when(schedule)
+
+    repo = HabitRepository(habit)
+    obj_id = repo.entity_to_db()
     print(habit)
+    print(obj_id)

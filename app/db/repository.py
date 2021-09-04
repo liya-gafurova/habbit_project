@@ -45,6 +45,7 @@ class HabitRepository:
         ))
 
         habit_entity.place = habit_obj.place
+
         # manage days
         convert_days = lambda s: [int(i) for i in (s or '').split(',') if i]
         one_period_days = (fn
