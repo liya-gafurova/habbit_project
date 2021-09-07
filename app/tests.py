@@ -1,7 +1,7 @@
 import datetime
 
 from app.db.repository import HabitRepository
-from app.domain.habitentity import HabitEntity, HabitData, HabitPlace, HabitSchedule, WeekPeriod
+from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, HabitSchedule, WeekPeriod
 from app.domain.helpers import DaysOfWeek, Months
 from app.presenters.docx_document import HabitDocument
 
@@ -14,7 +14,7 @@ def test_habit_creation():
             'After work during Mn-Fr',
         ]
     )
-    habit_place = HabitPlace(
+    habit_place = HabitLocation(
         place='In the park / On the embankment',
         outside=True
     )
@@ -53,7 +53,7 @@ def test_habit_document_creation():
             'After work during Mn-Fr',
         ]
     )
-    habit_place = HabitPlace(
+    habit_place = HabitLocation(
         place='In the park / On the embankment',
         outside=True
     )

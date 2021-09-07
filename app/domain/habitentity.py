@@ -18,7 +18,7 @@ class HabitData:
 
 
 @dataclass
-class HabitPlace:
+class HabitLocation:
     # Where?
     place: str
     outside: bool
@@ -45,7 +45,7 @@ class HabitEntity:
 
     def __init__(self, habit_data: HabitData):
         self.data = habit_data
-        self.place: HabitPlace = None
+        self.place: HabitLocation = None
         self.schedule: HabitSchedule = None
 
     def when(self, habit_schedule: HabitSchedule):
@@ -53,7 +53,7 @@ class HabitEntity:
         # этот набор периодов будет повторяться каждую неделю
         self.schedule = habit_schedule
 
-    def where(self, habit_place: HabitPlace):
+    def where(self, habit_place: HabitLocation):
         self.place = habit_place
 
     def __str__(self):

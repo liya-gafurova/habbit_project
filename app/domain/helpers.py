@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import IntEnum, Enum
 
 """
 PeriodN (object Value - from Architecture Patterns with Python): 
@@ -19,6 +19,16 @@ class DaysOfWeek(IntEnum):
     FRIDAY = 5
     SATURDAY = 6
     SUNDAY = 7
+
+
+class DaysOfWeekStr(Enum):
+    Monday = 'MONDAY'
+    Tuesday = 'TUESDAY'
+    Wednesday = 'WEDNESDAY'
+    Thursday = 'THURSDAY'
+    Friday = 'FRIDAY'
+    Saturday = 'SATURDAY'
+    Sunday = 'SUNDAY'
 
 
 class Months(IntEnum):

@@ -12,9 +12,11 @@ if 'TIME' not in st.session_state:
     st.session_state.TIME = []
 
 with st.form('Habit Parameters'):
+    # TODO Add month andd year
     name = st.text_input('Name')
     description = st.text_input('Description')
     place = st.text_input('Place')
+    outside = st.checkbox(label='Outside')
 
     st.write('Preconditions')
     preconditions = st.text_input(
@@ -63,6 +65,7 @@ with st.form('Habit Parameters'):
             name=name,
             description=description,
             place=place,
+            outside=outside,
             preconditions=preconditions.split(';'),
             week_periods=periods,
         )
