@@ -2,6 +2,7 @@ from datetime import time, timedelta, datetime
 
 import streamlit as st
 
+from app.domain.helpers import MonthsReverse, MonthsCycle, Months
 from app.use_cases.create_habit import create_habit
 
 st.title('Create Your Habit Tracker')
@@ -10,6 +11,19 @@ if 'WEEK' not in st.session_state:
     st.session_state.WEEK = []
 if 'TIME' not in st.session_state:
     st.session_state.TIME = []
+
+
+def get_next_n_months_for_current(current: int, n: int):
+    months_numbers = [current, ]
+    while True:
+        if next(MonthsCycle) == current:
+            break
+    for i in range(n):
+        months_numbers.append(
+            next(MonthsCycle)
+        )
+    return months_numbers
+
 
 with st.form('Habit Parameters'):
     # TODO Add month andd year
@@ -22,6 +36,17 @@ with st.form('Habit Parameters'):
     preconditions = st.text_input(
         'Please, enter your preconditions. If you have more. than 1, then separate them with ";"')
 
+    year = st.selectbox(
+        label='Year',
+        options=[datetime.today().year, datetime.today().year + 1],
+    )
+
+    month_name = st.selectbox(
+        label='Month',
+        options=[name for n, name in MonthsReverse.items() if
+                 n in get_next_n_months_for_current(current=datetime.today().month, n=2)]
+
+    )
     number_of_week_periods = st.number_input('Number of Week Periods', max_value=10, step=1)
     n = 1
     if not number_of_week_periods:
@@ -67,6 +92,8 @@ with st.form('Habit Parameters'):
             place=place,
             outside=outside,
             preconditions=preconditions.split(';'),
+            month=Months[month_name],
+            year=year,
             week_periods=periods,
         )
         st.session_state.WEEK = []

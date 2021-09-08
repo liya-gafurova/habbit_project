@@ -2,7 +2,7 @@ import datetime
 from typing import List, Tuple, Any
 
 from app.db.repository import HabitRepository
-from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, WeekPeriod
+from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, WeekPeriod, HabitSchedule
 from app.domain.helpers import DaysOfWeek, DaysOfWeekStr
 
 """
@@ -12,13 +12,19 @@ from app.domain.helpers import DaysOfWeek, DaysOfWeekStr
 
 
 def create_habit(**data):
+    print(data)
     habit_data = HabitData(name=data['name'], description=data['description'], preconditions=data['preconditions'])
     habit_place = HabitLocation(place=data['place'], outside=data['outside'])
-    wp = _map_days_of_weeks(data['week_periods'])
+    hs = HabitSchedule(
+        year=data['year'],
+        month=data['month'],
+        week_periods=[]
+    )
+    hs.week_periods = _map_days_of_weeks(data['week_periods'])
 
     habit = HabitEntity(habit_data=habit_data)
     habit.where(habit_place)
-    habit.when(wp)
+    habit.when(hs)
 
     repo = HabitRepository()
     db_id = repo.entity_to_db(habit)
