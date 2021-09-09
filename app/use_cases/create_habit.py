@@ -20,7 +20,7 @@ def create_habit(**data):
         month=data['month'],
         week_periods=[]
     )
-    hs.week_periods = _map_days_of_weeks(data['week_periods'])
+    hs.week_periods = _create_week_periods_entities(data['week_periods'])
 
     habit = HabitEntity(habit_data=habit_data)
     habit.where(habit_place)
@@ -31,9 +31,13 @@ def create_habit(**data):
     print(db_id)
 
 
+def get_all_habits():
+    repo = HabitRepository()
+    habit_entities = repo.get_all_habits()
+    return habit_entities
 
-def _map_days_of_weeks(periods: List[Tuple]):
-    period_entities= []
+def _create_week_periods_entities(periods: List[Tuple]):
+    period_entities = []
     for period in periods:
 
         time = period[1][0].strftime('%H:%M')

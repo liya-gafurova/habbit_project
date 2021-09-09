@@ -14,6 +14,7 @@ class Habit(BaseModel):
     name = TextField(column_name='name', null=False, )
     description = TextField(column_name='description', null=False)
     place = TextField(column_name='place', null=True)
+    outside = BooleanField('outside', default=False)
 
     class Meta:
         table_name = 'habit'

@@ -1,7 +1,9 @@
+from typing import List
+
 from peewee import fn
 
 from app.db.db import Habit, Preconditions, WeekPeriods
-from app.domain.habitentity import HabitEntity, HabitData, HabitSchedule, WeekPeriod
+from app.domain.habitentity import HabitEntity, HabitData, HabitSchedule, WeekPeriod, HabitLocation
 
 
 class HabitRepository:
@@ -10,7 +12,8 @@ class HabitRepository:
         new_habit_obj = Habit(
             name=habit.data.name,
             description=habit.data.description,
-            place=habit.place
+            place=habit.place.place,
+            outside=habit.place.outside
         )
         new_habit_obj.save()
 
@@ -36,6 +39,18 @@ class HabitRepository:
 
     def entity_from_db(self, id):
         habit_obj: Habit = Habit.get_by_id(id)
+        habit_entity = self._get_habit_info(habit_obj)
+
+        return habit_entity
+
+    def get_all_habits(self) -> List[HabitEntity]:
+        all_habits_objs = Habit.select()
+        habit_entities = []
+        for habit_obj in all_habits_objs:
+            habit_entities.append(self._get_habit_info(habit_obj))
+        return habit_entities
+
+    def _get_habit_info(self, habit_obj):
         preconditions = Preconditions.select().where(Preconditions.habit == habit_obj)
 
         habit_entity = HabitEntity(habit_data=HabitData(
@@ -44,7 +59,8 @@ class HabitRepository:
             preconditions=[obj.precondition for obj in preconditions]
         ))
 
-        habit_entity.place = habit_obj.place
+        habit_entity.place = HabitLocation(place=habit_obj.place,
+                                           outside=habit_obj.outside)
 
         # manage days
         convert_days = lambda s: [int(i) for i in (s or '').split(',') if i]
@@ -72,5 +88,4 @@ class HabitRepository:
 
         habit_entity.when(
             habit_schedule=HabitSchedule(week_periods=periods, month=month, year=year))
-
         return habit_entity
