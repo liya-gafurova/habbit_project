@@ -2,7 +2,6 @@ import datetime
 import calendar
 import math
 from dataclasses import dataclass
-from typing import List
 
 from docx import Document
 from docx.shared import Inches, RGBColor
@@ -32,28 +31,6 @@ class HabitDocument:
         self.document: Document = Document()
         self.days_in_month = self.get_number_of_days_in_months()
         self.planned_month = self.get_planned_month()
-
-    def get_number_of_days_in_months(self):
-        _, days_in_month = calendar.monthrange(self.habit.schedule.year, self.habit.schedule.month)
-        return days_in_month
-
-    def get_planned_month(self):
-        month_with_planned_habit = {}
-        for day in range(1, self.days_in_month + 1):
-            weekday_number = datetime.datetime.isoweekday(
-                datetime.datetime(self.habit.schedule.year, self.habit.schedule.month, day))
-            time = ''
-            for week_period in self.habit.schedule.week_periods:
-                if weekday_number in week_period.days_of_week:
-                    time = week_period.time
-
-            month_with_planned_habit[day] = OneDay(
-                day_number=day,
-                weekday_number=weekday_number,
-                weekday_letter=self.DocumentDaysOfWeek[weekday_number],
-                time=time
-            )
-        return month_with_planned_habit
 
     def create_document(self, document_name):
         self.make_landscape_orientation()
@@ -125,6 +102,28 @@ class HabitDocument:
         habit_time_line = cell.add_paragraph().add_run(" " * 6 + f'{day.time}\n')
         habit_time_line.font.bold = True
 
+    def get_number_of_days_in_months(self):
+        _, days_in_month = calendar.monthrange(self.habit.schedule.year, self.habit.schedule.month)
+        return days_in_month
+
+    def get_planned_month(self):
+        month_with_planned_habit = {}
+        for day in range(1, self.days_in_month + 1):
+            weekday_number = datetime.datetime.isoweekday(
+                datetime.datetime(self.habit.schedule.year, self.habit.schedule.month, day))
+            time = ''
+            for week_period in self.habit.schedule.week_periods:
+                if weekday_number in week_period.days_of_week:
+                    time = week_period.time
+
+            month_with_planned_habit[day] = OneDay(
+                day_number=day,
+                weekday_number=weekday_number,
+                weekday_letter=self.DocumentDaysOfWeek[weekday_number],
+                time=time
+            )
+        return month_with_planned_habit
+
     def _calculate_table_size(self):
         rows = math.ceil(self.days_in_month / self.NUMBER_OF_DAYS_IN_ROW)
         columns = self.NUMBER_OF_DAYS_IN_ROW
@@ -132,5 +131,3 @@ class HabitDocument:
 
     def _calculate_number_of_spaces(self, day_of_month):
         return ' ' * 9 if day_of_month > 9 else ' ' * 11
-
-

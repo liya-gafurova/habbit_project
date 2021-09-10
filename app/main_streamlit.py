@@ -1,11 +1,14 @@
+import base64
+import os
 from datetime import time, timedelta, datetime
 
 import streamlit as st
 from pandas import DataFrame
+from streamlit.state.widgets import NoValue
 
 from app.domain.helpers import MonthsReverse, MonthsCycle, Months
 from app.presenters.helpers import get_next_n_months_for_current
-from app.use_cases.create_habit import create_habit, get_all_habits
+from app.use_cases.create_habit import create_habit, get_all_habits, get_habit_printed_flag, create_document
 
 st.title('Habit App')
 
@@ -24,11 +27,18 @@ def display_habits_interface():
 
     st.table(df)
 
+def get_binary_file_downloader_html(bin_file, file_label='File'):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    bin_str = base64.b64encode(data).decode()
+    href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
+    return href
+
 
 def create_habit_interface():
     st.write('Create Habit')
     with st.form('Habit Parameters'):
-        # TODO Add month and year
+
         name = st.text_input('Name')
         description = st.text_input('Description')
         place = st.text_input('Place')
@@ -102,6 +112,31 @@ def create_habit_interface():
 
 def print_habit_interface():
     st.write('Print Habit Tracker')
+    st.write('Show all habits')
+    habit_entities = get_all_habits()
+    habit_data = [[habit_ent.data.name,
+                   habit_ent.data.description,
+                   habit_ent.place.place,
+                   get_habit_printed_flag(habit_ent)] for habit_ent in habit_entities]
+
+    df = DataFrame(habit_data, columns=['Name', 'Description', 'Location', 'Printed'])
+
+    st.table(df)
+    habit_entity_to_print = st.number_input(label='Habit id, which will be printed',
+                                            max_value=len(habit_entities) - 1,
+                                            value=NoValue(),
+                                            step=1)
+
+    submitted = st.button(label='Print!', )
+    if submitted:
+        try:
+            habit_entity = habit_entities[habit_entity_to_print]
+            created_doc_path = create_document(habit_entity)
+            st.markdown(get_binary_file_downloader_html(created_doc_path), unsafe_allow_html=True)
+
+        except Exception as er:
+            print(er.args)
+            st.write('Please, enter valid habit id.')
 
 
 display_funcs = {

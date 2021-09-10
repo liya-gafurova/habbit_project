@@ -2,7 +2,7 @@ from typing import List
 
 from peewee import fn
 
-from app.db.db import Habit, Preconditions, WeekPeriods
+from app.db.db import Habit, Preconditions, WeekPeriods, PrintingEvents
 from app.domain.habitentity import HabitEntity, HabitData, HabitSchedule, WeekPeriod, HabitLocation
 
 
@@ -49,6 +49,22 @@ class HabitRepository:
         for habit_obj in all_habits_objs:
             habit_entities.append(self._get_habit_info(habit_obj))
         return habit_entities
+
+    def is_already_printed(self, habit_ent):
+        habit = Habit.select().where(Habit.name == habit_ent.data.name,
+                                     Habit.description == habit_ent.data.description,
+                                     Habit.place == habit_ent.place.place
+                                     )
+        times_printed = PrintingEvents.select().where(PrintingEvents.habit == habit).count()
+        return times_printed > 0
+
+    def update_printed(self, habit_ent):
+        habit = Habit.select().where(Habit.name == habit_ent.data.name,
+                                     Habit.description == habit_ent.data.description,
+                                     Habit.place == habit_ent.place.place
+                                     )
+        event = PrintingEvents(habit=habit)
+        event.save()
 
     def _get_habit_info(self, habit_obj):
         preconditions = Preconditions.select().where(Preconditions.habit == habit_obj)

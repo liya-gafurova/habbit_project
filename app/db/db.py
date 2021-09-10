@@ -1,3 +1,4 @@
+import datetime
 import uuid as uuid
 from peewee import *
 
@@ -32,16 +33,21 @@ class WeekPeriods(BaseModel):
     habit = ForeignKeyField(Habit, related_name='days')
     day = IntegerField(column_name='day', null=False)
     time = TextField(column_name='time', null=True)
-    month = IntegerField(column_name='month', null = False)
+    month = IntegerField(column_name='month', null=False)
     year = IntegerField(column_name='year', null=False)
 
     class Meta:
         table_name = 'WeekPeriods'
 
 
+class PrintingEvents(BaseModel):
+    habit = ForeignKeyField(Habit, related_name='printing_events')
+    timestamp = DateTimeField(default=datetime.datetime.now())
+
+
 def create_tables():
     with db:
-        db.create_tables([Habit, Preconditions, WeekPeriods])
+        db.create_tables([Habit, Preconditions, WeekPeriods, PrintingEvents])
 
 
 create_tables()
