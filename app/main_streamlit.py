@@ -27,6 +27,7 @@ def display_habits_interface():
 
     st.table(df)
 
+
 def get_binary_file_downloader_html(bin_file, file_label='File'):
     with open(bin_file, 'rb') as f:
         data = f.read()
