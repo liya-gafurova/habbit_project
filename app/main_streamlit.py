@@ -95,7 +95,6 @@ def create_habit_interface():
 
         if submitted:
             periods = list(zip(st.session_state.WEEK, st.session_state.TIME))
-            print(periods)
             create_habit(
                 name=name,
                 description=description,

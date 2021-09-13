@@ -6,10 +6,7 @@ from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, WeekPe
 from app.domain.helpers import DaysOfWeek, DaysOfWeekStr
 from app.presenters.docx_document import HabitDocument
 
-"""
-сюда должны данные приходить уже!!!!!!
-и тут мы с ними делаем какие-то действия с привычкой - например, сохраняем в базу
-"""
+
 FILES_PATH = '/home/lia/PycharmProjects/IPR/IPR3/atomic_habbits/habbit_project/files/'
 
 def create_habit(**data):
