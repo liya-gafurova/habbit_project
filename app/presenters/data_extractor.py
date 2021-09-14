@@ -40,7 +40,7 @@ class DataExtractor:
         return HabitTrackerHeader(
             name=self.habit_ent.data.name,
             description=self.habit_ent.data.description,
-            preconditions=self.habit_ent.data.preconditions,
+            preconditions=', '.join(self.habit_ent.data.preconditions),
             place=f"{self.habit_ent.place.place}, {outside}",
         )
 

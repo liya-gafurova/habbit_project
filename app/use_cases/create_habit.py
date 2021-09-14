@@ -5,9 +5,8 @@ from app.db.repository import HabitRepository
 from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, WeekPeriod, HabitSchedule
 from app.domain.helpers import DaysOfWeek, DaysOfWeekStr
 from app.presenters.docx_document import HabitDocument
+from app.settings import FILES_PATH
 
-
-FILES_PATH = '/home/lia/PycharmProjects/IPR/IPR3/atomic_habbits/habbit_project/files/'
 
 def create_habit(**data):
     print(data)

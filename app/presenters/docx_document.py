@@ -13,8 +13,7 @@ class HabitDocument:
     NUMBER_OF_DAYS_IN_ROW = 7  # week in row
 
     def __init__(self, habit: HabitEntity):
-        self.habit: HabitEntity = habit
-        self.data_extractor = DataExtractor(self.habit)
+        self.data_extractor = DataExtractor(habit)
         self.document: Document = Document()
 
     def create_document(self, document_name):
@@ -42,7 +41,7 @@ class HabitDocument:
         line.add_run(header_data.description).bold = True
 
         line = self.document.add_paragraph('Preconditions: ')
-        line.add_run(', '.join(header_data.preconditions)).bold = True
+        line.add_run(header_data.preconditions).bold = True
 
         line = self.document.add_paragraph('Place: ')
         line.add_run(header_data.place).bold = True
