@@ -6,10 +6,11 @@ from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, WeekPe
 from app.domain.helpers import DaysOfWeek, DaysOfWeekStr
 from app.presenters.docx_document import DocxDocument
 from app.presenters.latex_document import LatexDocument
-from app.settings import FILES_PATH
+from app.settings import FILES_PATH, FILES_EXTENSIONS
 
 
 def create_habit(**data):
+    # TODO added habit entity uuid
     print(data)
     habit_data = HabitData(name=data['name'], description=data['description'], preconditions=data['preconditions'])
     habit_place = HabitLocation(place=data['place'], outside=data['outside'])
@@ -35,20 +36,15 @@ def get_all_habits():
     return habit_entities
 
 
-def get_habit_printed_flag(habit_ent):
-    repo = HabitRepository()
-    return repo.is_already_printed(habit_ent)
-
-
-def create_document(habit_ent, doc_type):
+def create_habit_tracker_document(habit_ent, doc_type):
     doc_creators = {
         'DOCX': DocxDocument,
         'PDF': LatexDocument,
     }
 
     file_extensions = {
-        'DOCX': '.docx',
-        'PDF': '.pdf'
+        FILES_EXTENSIONS[0]: str.lower(f'.{FILES_EXTENSIONS[0]}'),
+        FILES_EXTENSIONS[1]: str.lower(f'.{FILES_EXTENSIONS[1]}'),
     }
 
     doc_creator = doc_creators[doc_type](habit_ent)

@@ -8,7 +8,8 @@ from streamlit.state.widgets import NoValue
 
 from app.domain.helpers import MonthsReverse, Months
 from app.presenters.helpers import get_next_n_months_for_current
-from app.use_cases.create_habit import create_habit, get_all_habits, get_habit_printed_flag, create_document
+from app.settings import FILES_EXTENSIONS
+from app.use_cases.create_habit import create_habit, get_all_habits, create_habit_tracker_document
 
 st.title('Habit App')
 
@@ -117,9 +118,9 @@ def print_habit_interface():
     habit_data = [[habit_ent.data.name,
                    habit_ent.data.description,
                    habit_ent.place.place,
-                   get_habit_printed_flag(habit_ent)] for habit_ent in habit_entities]
+                   ] for habit_ent in habit_entities]
 
-    df = DataFrame(habit_data, columns=['Name', 'Description', 'Location', 'Printed'])
+    df = DataFrame(habit_data, columns=['DB_id', 'Name', 'Description', 'Location'])
 
     st.table(df)
     habit_entity_to_print = st.number_input(label='Habit id, which will be printed',
@@ -127,13 +128,13 @@ def print_habit_interface():
                                             value=NoValue(),
                                             step=1)
     doc_type = st.radio(label='Document Type',
-                        options=['DOCX', 'PDF'])
+                        options=FILES_EXTENSIONS)
 
     submitted = st.button(label='Print!', )
     if submitted:
         try:
             habit_entity = habit_entities[habit_entity_to_print]
-            created_doc_path = create_document(habit_entity, doc_type)
+            created_doc_path = create_habit_tracker_document(habit_entity, doc_type)
             st.markdown(get_binary_file_downloader_html(created_doc_path), unsafe_allow_html=True)
 
         except Exception as er:
