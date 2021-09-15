@@ -6,7 +6,7 @@ import streamlit as st
 from pandas import DataFrame
 from streamlit.state.widgets import NoValue
 
-from app.domain.helpers import MonthsReverse, MonthsCycle, Months
+from app.domain.helpers import MonthsReverse, Months
 from app.presenters.helpers import get_next_n_months_for_current
 from app.use_cases.create_habit import create_habit, get_all_habits, get_habit_printed_flag, create_document
 
@@ -126,12 +126,14 @@ def print_habit_interface():
                                             max_value=len(habit_entities) - 1,
                                             value=NoValue(),
                                             step=1)
+    doc_type = st.radio(label='Document Type',
+                        options=['DOCX', 'PDF'])
 
     submitted = st.button(label='Print!', )
     if submitted:
         try:
             habit_entity = habit_entities[habit_entity_to_print]
-            created_doc_path = create_document(habit_entity)
+            created_doc_path = create_document(habit_entity, doc_type)
             st.markdown(get_binary_file_downloader_html(created_doc_path), unsafe_allow_html=True)
 
         except Exception as er:

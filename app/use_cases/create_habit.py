@@ -1,10 +1,11 @@
 import datetime
-from typing import List, Tuple, Any
+from typing import List, Tuple
 
 from app.db.repository import HabitRepository
 from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, WeekPeriod, HabitSchedule
 from app.domain.helpers import DaysOfWeek, DaysOfWeekStr
-from app.presenters.docx_document import HabitDocument
+from app.presenters.docx_document import DocxDocument
+from app.presenters.latex_document import LatexDocument
 from app.settings import FILES_PATH
 
 
@@ -39,11 +40,20 @@ def get_habit_printed_flag(habit_ent):
     return repo.is_already_printed(habit_ent)
 
 
-def create_document(habit_ent):
-    # create document
-    doc = HabitDocument(habit_ent)
-    doc_name = FILES_PATH + f'{habit_ent.data.name}{datetime.datetime.now()}.docx'
-    doc.create_document(doc_name)
+def create_document(habit_ent, doc_type):
+    doc_creators = {
+        'DOCX': DocxDocument,
+        'PDF': LatexDocument,
+    }
+
+    file_extensions = {
+        'DOCX': '.docx',
+        'PDF': '.pdf'
+    }
+
+    doc_creator = doc_creators[doc_type](habit_ent)
+    doc_name = FILES_PATH + f'{habit_ent.data.name}{datetime.datetime.now()}{file_extensions[doc_type]}'
+    doc_creator.create_document(doc_name)
 
     # update Printed Event
     repo = HabitRepository()

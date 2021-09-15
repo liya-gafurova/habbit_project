@@ -1,5 +1,5 @@
 import datetime
-import uuid as uuid
+
 from peewee import *
 
 db = SqliteDatabase('/home/lia/PycharmProjects/IPR/IPR3/atomic_habbits/habbit_project/app/db/db.sqlite')

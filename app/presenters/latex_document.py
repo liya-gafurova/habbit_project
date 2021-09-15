@@ -1,13 +1,9 @@
 import datetime
 import math
-
-import numpy as np
-
-from pylatex import Document, Section, Subsection, Tabular, Math, TikZ, Axis, \
-    Plot, Figure, Matrix, Alignat, Command, Table, Tabu, NewLine, LineBreak
-from pylatex.base_classes import LatexObject
-from pylatex.utils import italic, bold
 import os
+
+from pylatex import Document, Section, Tabu
+from pylatex.utils import bold
 
 from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, HabitSchedule, WeekPeriod
 from app.domain.helpers import DaysOfWeek, Months
@@ -28,7 +24,8 @@ class LatexDocument:
     def create_document(self, document_path=f'{FILES_PATH}latex_{datetime.datetime.now()}'):
         self._create_header()
         self._create_table()
-        self.doc.generate_pdf(document_path, clean_tex=False)
+        ext = os.path.splitext(document_path)[1]
+        self.doc.generate_pdf(os.path.splitext(document_path)[0], clean_tex=False)
 
     def _create_header(self):
         header_content = self.data_extractor.get_header_content()
@@ -51,17 +48,17 @@ class LatexDocument:
                 table.add_hline()
                 day_counter = 1
                 for row in range(rows):
-                    self._fill_row(table,  day_counter)
+                    self._fill_row(table, day_counter)
                     day_counter += cols
 
-    def _fill_row(self, table,  day_counter):
+    def _fill_row(self, table, day_counter):
         row = []
 
-        for wd in range(day_counter, day_counter+self.NUMBER_OF_DAYS_IN_ROW):
+        for wd in range(day_counter, day_counter + self.NUMBER_OF_DAYS_IN_ROW):
             if day_counter <= self.data_extractor.days_in_month:
                 one_day = self.data_extractor.planned_month[day_counter]
-                cell_header = self.add_cell_header(one_day)
-                time_line = self.add_cell_time_paragraph(one_day)
+                cell_header = self._add_cell_header(one_day)
+                time_line = self._add_cell_time_paragraph(one_day)
                 row.append(f'{cell_header}  {time_line}')
 
             else:
@@ -71,19 +68,18 @@ class LatexDocument:
         table.add_row(row, escape=True)
         table.add_hline()
 
-    def add_cell_header(self, day):
+    def _add_cell_header(self, day):
         space_fillers = self._calculate_number_of_spaces(day.day_number)
         zero_month_filler = 0 if day.month < 10 else ''  # data extractors
-        cell_header =f"{day.day_number}/{zero_month_filler}{day.month}{space_fillers}{day.weekday_letter}"
+        cell_header = f"{day.day_number}/{zero_month_filler}{day.month}{space_fillers}{day.weekday_letter}"
         # make  grey text
 
         return cell_header
 
-    def add_cell_time_paragraph(self,  day: OneDay):
+    def _add_cell_time_paragraph(self, day: OneDay):
         habit_time_line = " " * 6 + f'{day.time}\n'
         # habit_time_line.font.bold = True
-        return  habit_time_line
-
+        return habit_time_line
 
     def _calculate_number_of_spaces(self, day_of_month):
         return ' ' * 9 if day_of_month > 9 else ' ' * 11

@@ -3,7 +3,7 @@ import datetime
 from app.db.repository import HabitRepository
 from app.domain.habitentity import HabitEntity, HabitData, HabitLocation, HabitSchedule, WeekPeriod
 from app.domain.helpers import DaysOfWeek, Months
-from app.presenters.docx_document import HabitDocument
+from app.presenters.docx_document import DocxDocument
 
 
 def test_habit_creation():
@@ -45,6 +45,7 @@ def test_habit_creation():
     assert habit.__str__() == '{"name": "Walking", "description": "Walking or Other outside  everyday activity", "place": "In the park / On the embankment"}'
     assert habit.data.name == habit_entity.data.name
 
+
 def test_habit_document_creation():
     habit_name = HabitData(
         name='Walking',
@@ -77,10 +78,7 @@ def test_habit_document_creation():
     habit.where(habit_place)
     habit.when(schedule)
 
-
-    doc = HabitDocument(habit)
+    doc = DocxDocument(habit)
     identifier = datetime.datetime.now()
-    doc.create_document(f'/home/lia/PycharmProjects/IPR/IPR3/atomic_habbits/habbit_project/files/first_habit_doc_{identifier}.docx')
-
-
-
+    doc.create_document(
+        f'/home/lia/PycharmProjects/IPR/IPR3/atomic_habbits/habbit_project/files/first_habit_doc_{identifier}.docx')
