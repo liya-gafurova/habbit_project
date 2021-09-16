@@ -26,8 +26,8 @@ def create_habit(**data):
     habit.when(hs)
 
     repo = HabitRepository()
-    db_id = repo.entity_to_db(habit)
-    return db_id
+    uuid = repo.entity_to_db(habit)
+    return uuid
 
 
 def get_all_habits():

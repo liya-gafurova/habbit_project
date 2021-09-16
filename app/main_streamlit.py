@@ -130,7 +130,7 @@ def print_habit_interface():
     doc_type = st.radio(label='Document Type',
                         options=FILES_EXTENSIONS)
 
-    submitted = st.button(label='Print!', )
+    submitted = st.button(label='Print!')
     if submitted:
         try:
             habit_entity = habit_entities[habit_entity_to_print]

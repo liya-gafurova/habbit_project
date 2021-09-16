@@ -1,5 +1,6 @@
 from typing import List
 
+import uuid
 from peewee import fn
 
 from app.db.db import Habit, Preconditions, WeekPeriods, PrintingEvents
@@ -10,6 +11,7 @@ class HabitRepository:
 
     def entity_to_db(self, habit: HabitEntity):
         new_habit_obj = Habit(
+            uuid=uuid.uuid4().hex,
             name=habit.data.name,
             description=habit.data.description,
             place=habit.place.place,
@@ -35,10 +37,10 @@ class HabitRepository:
                     year=year
                 )
 
-        return new_habit_obj.id
+        return new_habit_obj.uuid
 
-    def entity_from_db(self, id):
-        habit_obj: Habit = Habit.get_by_id(id)
+    def entity_from_db(self, uuid):
+        habit_obj: Habit = Habit.get(Habit.uuid==uuid)
         habit_entity = self._get_habit_info(habit_obj)
 
         return habit_entity

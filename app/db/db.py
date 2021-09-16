@@ -12,7 +12,8 @@ class BaseModel(Model):
 
 class Habit(BaseModel):
     id = AutoField(primary_key=True)
-    name = TextField(column_name='name', null=False, )
+    uuid = TextField(column_name='uuid', null=False)
+    name = TextField(column_name='name', null=False)
     description = TextField(column_name='description', null=False)
     place = TextField(column_name='place', null=True)
     outside = BooleanField('outside', default=False)
