@@ -7,8 +7,6 @@ from collections import namedtuple, ChainMap
 import pytest
 from docx import Document
 
-import app.habit as habit
-
 logger = logging.getLogger(__name__)
 
 
@@ -140,11 +138,36 @@ def test_create_document():
 
 ## abstract protocol that describes behavior of an paticular class
 
-class TransformationParamsToDocumentUseCase(typing.Protocol):
-    def transform(self, params, document):
-        pass
+# class TransformationParamsToDocumentUseCase(typing.Protocol):
+#     def transform(self, params, document):
+#         pass
+#
+#
+# class TransformHabitToDocument(TransformationParamsToDocumentUseCase):
+#     def transform(self, params: habit.HabitEntity, document: habit.DocxDocument):
+#         pass
 
 
-class TransformHabitToDocument(TransformationParamsToDocumentUseCase):
-    def transform(self, params: habit.HabitEntity, document: habit.DocxDocument):
-        pass
+## Polymorphism
+
+class Cat:
+    def __init__(self, name):
+        self.name = name
+        self.sound = 'Purrrr'
+
+    def make_sound(self):
+        print(self.sound)
+
+
+class Dog:
+    def __init__(self, name):
+        self.name = name
+        self.sound = 'Auff'
+
+    def make_sound(self):
+        print(self.sound)
+
+
+animals = [Dog('Bobic'), Cat('Marysa'), Dog('Jack')]
+for animal in animals:
+    animal.make_sound()
