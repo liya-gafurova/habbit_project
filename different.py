@@ -1,8 +1,10 @@
+import copy
 import logging
+import re
 import typing
 from dataclasses import dataclass
 from typing import NamedTuple
-from collections import namedtuple, ChainMap
+from collections import namedtuple, ChainMap, Counter
 
 import pytest
 from docx import Document
@@ -171,3 +173,31 @@ class Dog:
 animals = [Dog('Bobic'), Cat('Marysa'), Dog('Jack')]
 for animal in animals:
     animal.make_sound()
+
+# try lambdas
+
+# сделать какое-то действие над каждым элементом списка
+l = [46, 4, 11, 12, 64, 59, 59, 96, 39, 61, 80, 12, 32, 30, 14, 38, 53, 72, 11, 16]
+l2 = list(map(lambda x: x // 10, l))
+
+# https://tproger.ru/problems/python-3-exercises-for-beginners-geekbrains/
+# Задача 22
+# Напишите программу, которая принимает текст и выводит два слова: наиболее часто встречающееся и самое длинное.
+text = '''In this situation, both the normal function and the lambda behave similarly. In the next section, you’ll see a situation where the behavior of a lambda can be deceptive due to its evaluation time (definition time vs runtime).'''
+
+words = re.sub(re.compile('[.,!?-`\'’()]'), '', text).split(' ')
+word_lens = list(map(len, words))
+word_counts = Counter(words)
+longest = words[word_lens.index(max(word_lens))]
+frequent = next(iter({k: v for k, v in sorted(word_counts.items(), key=lambda item: item[1], reverse=True)})) # sort dict by value
+print(longest, frequent)
+
+## ----
+word_counts = Counter(words)
+frequent = word_counts.most_common()[0]
+longest = max(words, key=len)
+print(longest, frequent)
+
+# map / reduce
+
+# decorators
