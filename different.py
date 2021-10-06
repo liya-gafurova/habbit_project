@@ -1,5 +1,6 @@
 import copy
 import logging
+import random
 import re
 import typing
 from dataclasses import dataclass
@@ -198,6 +199,26 @@ frequent = word_counts.most_common()[0]
 longest = max(words, key=len)
 print(longest, frequent)
 
+# С помощью анонимной функции (!!! lambda) извлеките (!!! filter()) из списка числа (list), делимые на 15.
+l = [46, 4, 11, 12, 64, 59, 59, 96, 39,30,  61, 80, 12, 32, 30, 14, 38, 53, 72, 11, 16]
+ll = list(filter(lambda element: element % 15 == 0, l))
+# https://acmp.ru/index.asp?main=tasks&str=%20&page=19&id_type=0 -- олимпиадные  задачи по программированию
 # map / reduce
 
 # decorators
+
+def wrapper(func):
+    def inner(list_range):
+        print('before function')
+        func(list_range)
+        print('after_function')
+
+    return inner
+
+
+
+@wrapper
+def test_func(list_range):
+    print([random.randint(1, list_range)for i in range(list_range)])
+
+test_func(5)
