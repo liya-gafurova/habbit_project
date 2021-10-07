@@ -4,6 +4,7 @@ import random
 import re
 import typing
 from dataclasses import dataclass
+from functools import reduce
 from typing import NamedTuple
 from collections import namedtuple, ChainMap, Counter
 
@@ -190,7 +191,8 @@ words = re.sub(re.compile('[.,!?-`\'’()]'), '', text).split(' ')
 word_lens = list(map(len, words))
 word_counts = Counter(words)
 longest = words[word_lens.index(max(word_lens))]
-frequent = next(iter({k: v for k, v in sorted(word_counts.items(), key=lambda item: item[1], reverse=True)})) # sort dict by value
+frequent = next(
+    iter({k: v for k, v in sorted(word_counts.items(), key=lambda item: item[1], reverse=True)}))  # sort dict by value
 print(longest, frequent)
 
 ## ----
@@ -200,10 +202,25 @@ longest = max(words, key=len)
 print(longest, frequent)
 
 # С помощью анонимной функции (!!! lambda) извлеките (!!! filter()) из списка числа (list), делимые на 15.
-l = [46, 4, 11, 12, 64, 59, 59, 96, 39,30,  61, 80, 12, 32, 30, 14, 38, 53, 72, 11, 16]
+l = [46, 4, 11, 12, 64, 59, 59, 96, 39, 30, 61, 80, 12, 32, 30, 14, 38, 53, 72, 11, 16]
 ll = list(filter(lambda element: element % 15 == 0, l))
 # https://acmp.ru/index.asp?main=tasks&str=%20&page=19&id_type=0 -- олимпиадные  задачи по программированию
 # map / reduce
+
+# map ()
+# filter()
+# reduce()
+
+numbers = [3, 4, 5, 6]
+
+
+def cum_sum(first, second):
+    return first + second
+
+
+d = reduce(cum_sum, numbers)
+print(d)
+
 
 # decorators
 
@@ -216,9 +233,9 @@ def wrapper(func):
     return inner
 
 
-
 @wrapper
 def test_func(list_range):
-    print([random.randint(1, list_range)for i in range(list_range)])
+    print([random.randint(1, list_range) for i in range(list_range)])
+
 
 test_func(5)
