@@ -262,12 +262,26 @@ plt.show()
 
 time_start = 123
 time_max_value = 158
+max_value = 10000
+n = 5
 
-xx = np.array([time_start,140, time_max_value])
-yy = np.array([0, 10, 59])
+def generate_intermediate_points(start_point, end_point, N, intermediate_points = [],):
+    if len(intermediate_points) >= N:
+        return intermediate_points
+    else:
+        possible_points = np.linspace(start_point, end_point, n, endpoint=False)
+        point = random.choice(possible_points[1:])
+        intermediate_points.append(point)
+        return generate_intermediate_points(intermediate_points[-1], end_point,N, intermediate_points)
+
+x = np.array([time_start] + generate_intermediate_points(time_start, time_max_value, n, []) + [time_max_value])
+y = np.array([0] + generate_intermediate_points(0, max_value, n, []) + [max_value])
 
 #he string has to be one of ‘linear’, ‘nearest’, ‘nearest-up’,
 # ‘zero’, ‘slinear’, ‘quadratic’, ‘cubic’, ‘previous’, or ‘next’.
-f1 = interp1d(xx, yy, kind='quadratic')
-plt.plot(xx, yy, 'o', xx, f1(xx), '-')
+f1 = interp1d(x, y, kind='quadratic')
+plt.plot(x, y, 'o', x, f1(x), '-')
 plt.show()
+
+
+
