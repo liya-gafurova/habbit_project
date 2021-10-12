@@ -8,6 +8,7 @@ from functools import reduce
 from typing import NamedTuple
 from collections import namedtuple, ChainMap, Counter
 
+import pafy
 import pytest
 from docx import Document
 
@@ -246,9 +247,8 @@ from scipy.interpolate import interp1d
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 x = np.linspace(0, 10, num=11, endpoint=True)
-y = np.cos(-x**2/9.0)
+y = np.cos(-x ** 2 / 9.0)
 f = interp1d(x, y)
 f2 = interp1d(x, y, kind='quadratic')
 
@@ -265,23 +265,33 @@ time_max_value = 158
 max_value = 10000
 n = 5
 
-def generate_intermediate_points(start_point, end_point, N, intermediate_points = [],):
+
+def generate_intermediate_points(start_point, end_point, N, intermediate_points=[]):
     if len(intermediate_points) >= N:
         return intermediate_points
     else:
-        possible_points = np.linspace(start_point, end_point, n, endpoint=False)
+        possible_points = np.linspace(start_point, end_point, 10, endpoint=False)
         point = random.choice(possible_points[1:])
         intermediate_points.append(point)
-        return generate_intermediate_points(intermediate_points[-1], end_point,N, intermediate_points)
+        return generate_intermediate_points(intermediate_points[-1], end_point, N, intermediate_points)
+
 
 x = np.array([time_start] + generate_intermediate_points(time_start, time_max_value, n, []) + [time_max_value])
 y = np.array([0] + generate_intermediate_points(0, max_value, n, []) + [max_value])
 
-#he string has to be one of ‘linear’, ‘nearest’, ‘nearest-up’,
+# he string has to be one of ‘linear’, ‘nearest’, ‘nearest-up’,
 # ‘zero’, ‘slinear’, ‘quadratic’, ‘cubic’, ‘previous’, or ‘next’.
-f1 = interp1d(x, y, kind='quadratic')
+f1 = interp1d(x, y, kind='linear')
 plt.plot(x, y, 'o', x, f1(x), '-')
 plt.show()
+####################
 
+url = 'https://www.youtube.com/watch?v=4V6pV40RF9A'
+# url = 'https://www.youtube.com/watch?v=rfzlV6oCbG0'
 
-
+video = pafy.new(url)
+print(f'''
+{video.title}
+{video.duration}
+{video.viewcount}
+''')
