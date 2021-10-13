@@ -284,14 +284,34 @@ y = np.array([0] + generate_intermediate_points(0, max_value, n, []) + [max_valu
 f1 = interp1d(x, y, kind='linear')
 plt.plot(x, y, 'o', x, f1(x), '-')
 plt.show()
+
+def get_accumulation_function(fight_duration_seconds, max_value_seconds, max_value):
+    x = np.array([0, max_value_seconds, fight_duration_seconds])
+    y = np.array([0, max_value, max_value])
+    linear_spline_func = interp1d(x, y, kind='linear')
+
+    plt.plot(x, y, 'o', x, linear_spline_func(x), '-')
+    plt.plot([max_value_seconds ], [linear_spline_func(max_value_seconds )] , 'v')
+    plt.show()
+
+    return linear_spline_func
+
+for i in range(4):
+    max_val_min = random.randint(1, 59)
+    print(max_val_min)
+    spline = get_accumulation_function(60*60, 60*max_val_min, 10000)
+    print(spline(60*20))
+    print(spline(60*30))
+
+
 ####################
-
-url = 'https://www.youtube.com/watch?v=4V6pV40RF9A'
-# url = 'https://www.youtube.com/watch?v=rfzlV6oCbG0'
-
-video = pafy.new(url)
-print(f'''
-{video.title}
-{video.duration}
-{video.viewcount}
-''')
+#
+# url = 'https://www.youtube.com/watch?v=4V6pV40RF9A'
+# # url = 'https://www.youtube.com/watch?v=rfzlV6oCbG0'
+#
+# video = pafy.new(url)
+# print(f'''
+# {video.title}
+# {video.duration}
+# {video.viewcount}
+# ''')
