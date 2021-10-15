@@ -326,3 +326,13 @@ for i in range(4):
 # {video.duration}
 # {video.viewcount}
 # ''')
+############333
+from profanity_filter import ProfanityFilter
+
+pf = ProfanityFilter()
+
+pf.censor("That's bullshit!")
+# "That's ********!"
+
+pf.censor_word('fuck')
+# Word(uncensored='fuck', censored='****', original_profane_word='fuck')
