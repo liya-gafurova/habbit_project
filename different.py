@@ -331,8 +331,9 @@ from profanity_filter import ProfanityFilter
 
 pf = ProfanityFilter()
 
-pf.censor("That's bullshit!")
-# "That's ********!"
+clear_string = 'that is an amazing fight'
+bad_string = 'this is some bullshit'
 
-pf.censor_word('fuck')
-# Word(uncensored='fuck', censored='****', original_profane_word='fuck')
+for phrase in [clear_string, bad_string]:
+    if pf.is_profane(phrase):
+        print(f'{phrase} is PROFANE')
