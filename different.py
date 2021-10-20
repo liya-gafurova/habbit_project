@@ -1,9 +1,10 @@
 import copy
+import json
 import logging
 import random
 import re
 import typing
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from functools import reduce
 from typing import NamedTuple
 from collections import namedtuple, ChainMap, Counter
@@ -247,17 +248,6 @@ from scipy.interpolate import interp1d
 import numpy as np
 import matplotlib.pyplot as plt
 
-x = np.linspace(0, 10, num=11, endpoint=True)
-y = np.cos(-x ** 2 / 9.0)
-f = interp1d(x, y)
-f2 = interp1d(x, y, kind='quadratic')
-
-xnew = np.linspace(0, 10, num=41, endpoint=True)
-
-plt.plot(x, y, 'o', xnew, f(xnew), '-', xnew, f2(xnew), '--')
-plt.legend(['data', 'linear', 'cubic'], loc='best')
-plt.show()
-
 # TODO how to make commit in the past
 
 time_start = 123
@@ -285,16 +275,6 @@ f1 = interp1d(x, y, kind='linear')
 plt.plot(x, y, 'o', x, f1(x), '-')
 plt.show()
 
-# def get_accumulation_function(fight_duration_seconds, max_value_seconds, max_value):
-#     x = np.array([0, max_value_seconds, fight_duration_seconds])
-#     y = np.array([0, max_value, max_value])
-#     linear_spline_func = interp1d(x, y, kind='linear')
-#
-#     plt.plot(x, y, 'o', x, linear_spline_func(x), '-')
-#     plt.plot([max_value_seconds ], [linear_spline_func(max_value_seconds )] , 'v')
-#     plt.show()
-#
-#     return linear_spline_func
 
 def get_accumulation_function2(fight_duration_seconds, max_value_seconds, max_value):
     x = [0, max_value_seconds, fight_duration_seconds]
@@ -337,3 +317,31 @@ bad_string = 'this is some bullshit'
 for phrase in [clear_string, bad_string]:
     if pf.is_profane(phrase):
         print(f'{phrase} is PROFANE')
+
+from  pprint import pprint
+
+@dataclass
+class Car:
+    id: int
+    number: str
+    mark: str
+    owners: typing.List[str]
+
+car = Car(id=1, number='123', mark='Solaris', owners=['Lua', 'Lia'])
+
+pprint(animals)
+print(animals)
+
+pprint({'': 1, 'list': ['sdf', 'wef', 234, {"qwre": 15}]})
+print({'': 1, 'list': ['sdf', 'wef', 234, {"qwre": 15}]})
+
+pprint(json.dumps({'': 1, 'list': ['sdf', 'wef', 234, {"qwre": 15}]}))
+print(json.dumps({'': 1, 'list': ['sdf', 'wef', 234, {"qwre": 15}]}))
+
+pprint(car)
+print(car)
+
+pprint(asdict(car))
+print(asdict(car))
+
+## не вижу разницы
